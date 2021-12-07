@@ -16,13 +16,13 @@ jobs:
     strategy:
       matrix:
         env:
-          - { ROS_DISTRO: melodic, ROS_REPO: main }
-          - { ROS_DISTRO: noetic, ROS_REPO: main }
+          - { ROS_DISTRO: melodic, ROS_REPO: main, UPSTREAM_WORKSPACE: '.ci.rosinstall' }
+          - { ROS_DISTRO: noetic, ROS_REPO: main, UPSTREAM_WORKSPACE: '.ci.rosinstall' }
         experimental: [false]
         include:
-          - env: { ROS_DISTRO: melodic, ROS_REPO: testing }
+          - env: { ROS_DISTRO: melodic, ROS_REPO: testing, UPSTREAM_WORKSPACE: '.ci.rosinstall' }
             experimental: true
-          - env: { ROS_DISTRO: noetic, ROS_REPO: testing }
+          - env: { ROS_DISTRO: noetic, ROS_REPO: testing, UPSTREAM_WORKSPACE: '.ci.rosinstall' }
             experimental: true
     runs-on: ubuntu-latest
     steps:
