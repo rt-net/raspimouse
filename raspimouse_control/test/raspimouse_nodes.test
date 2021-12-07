@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <include file="$(find raspimouse_control)/launch/control.launch" />
+  <test test-name="test_buzzer" pkg="raspimouse_control" type="test_buzzer.py" />
+  <test test-name="test_lightsensors" pkg="raspimouse_control" type="test_lightsensors.py" />
+  <test test-name="test_motors" pkg="raspimouse_control" type="test_motors.py" time-limit="60.0" />
+</launch>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="enable_odom_tf" default="true" />
+    <arg name="urg" default="false" />
+    <arg name="lidar_frame" default="laser" />
+
+    <!-- raspimouse control nodes except motor control -->
+    <node name="buzzer" pkg="raspimouse_control" type="buzzer.py" required="true" />
+    <node name="lightsensors" pkg="raspimouse_control" type="lightsensors" required="true">
+        <param name="frequency" value="10" />
+    </node>
+    <node name="leds" pkg="raspimouse_control" type="leds" required="true" />
+    <node name="buttons" pkg="raspimouse_control" type="buttons" required="true" />
+
+    <!-- raspimouse motor control nodes -->
+    <rosparam command="load" file="$(find raspimouse_control)/config/raspimouse_control.yaml" />
+    <rosparam subst_value="true">
+        enable_odom_tf: $(arg enable_odom_tf)
+    </rosparam>
+    <arg name="diff_drive_controller" value="diff_drive_controller" />
+    <node name="controller_spawer" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="$(arg diff_drive_controller) joint_state_controller" />
+
+    <arg name="initial_motor_power" default="on" />
+    <node name="motors" pkg="raspimouse_control" type="motors" required="true"
+        output="screen" args="$(arg initial_motor_power)" />
+</launch>
