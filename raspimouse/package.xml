@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>raspimouse</name>
+    <version>0.0.0</version>
+    <description>The raspimouse meta package</description>
+    <maintainer email="shop@rt-net.jp">RT Corporation</maintainer>
+
+    <license>Apache-2.0</license>
+
+    <url type="bugtracker">https://github.com/rt-net/raspimouse/issues</url>
+    <url type="repository">https://github.com/rt-net/raspimouse</url>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <exec_depend>raspimouse_description</exec_depend>
+    <exec_depend>raspimouse_msgs</exec_depend>
+    <exec_depend>raspimouse_stamped_msgs</exec_depend>
+
+    <export>
+        <metapackage />
+    </export>
+</package>
