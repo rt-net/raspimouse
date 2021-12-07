@@ -11,6 +11,7 @@
     <url type="repository">https://github.com/rt-net/raspimouse</url>
 
     <buildtool_depend>catkin</buildtool_depend>
+    <exec_depend>raspimouse_bringup</exec_depend>
     <exec_depend>raspimouse_control</exec_depend>
     <exec_depend>raspimouse_description</exec_depend>
     <exec_depend>raspimouse_msgs</exec_depend>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>raspimouse_bringup</name>
+  <version>0.0.0</version>
+  <description>ROS bringup package for raspimouse</description>
+
+  <maintainer email="support@rt-net.jp">RT Corporation</maintainer>
+
+  <license>Apache-2.0</license>
+
+  <author email="daisuke.sato@rt-net.jp">Daisuke Sato</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>raspimouse_control</depend>
+  <depend>topic_tools</depend>
+  <depend>twist_mux</depend>
+  <depend>urg_node</depend>
+
+  <test_depend>roslaunch</test_depend>
+
+</package>

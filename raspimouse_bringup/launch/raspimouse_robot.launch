@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="namespace" default="null" />
+    <arg name="enable_odom_tf" default="true" />
+    <arg name="urg" default="false" />
+    <arg name="lidar_frame" default="laser" />
+
+    <include file="$(find raspimouse_launch)/launch/raspimouse_core.launch">
+        <arg name="namespace" default="$(arg namespace)" />
+        <arg name="enable_odom_tf" value="$(arg enable_odom_tf)" />
+        <arg name="urg" value="$(arg urg)" />
+        <arg name="lidar_frame" value="$(lidar_frame)" />
+    </include>
+
+    <node pkg="urg_node" name="urg_node" type="urg_node" required="true" if="$(arg urg)">
+        <param name="frame_id" value="$(lidar_frame)" />
+    </node>
+</launch>
