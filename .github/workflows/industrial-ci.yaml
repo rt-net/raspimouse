@@ -2,11 +2,14 @@ name: industrial_ci
 
 on:
   push:
+    branches:
+      - master
+      - '**-devel'
     paths-ignore:
-    - '**.md'
+      - '**.md'
   pull_request:
     paths-ignore:
-    - '**.md'
+      - '**.md'
   schedule:
     - cron: "0 2 * * 0" # Weekly on Sundays at 02:00
 
