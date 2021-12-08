@@ -13,6 +13,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>raspimouse_control</depend>
+  <depend>raspimouse_description</depend>
   <depend>topic_tools</depend>
   <depend>twist_mux</depend>
   <depend>urg_node</depend>
