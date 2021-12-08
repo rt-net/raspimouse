@@ -4,6 +4,8 @@
     <arg name="enable_odom_tf" default="true" />
     <arg name="urg" default="false" />
     <arg name="lidar_frame" default="laser" />
+    <arg name="initial_motor_power" default="on" />
+    <arg name="diff_drive_controller" default="diff_drive_controller" />
 
     <!-- to avoid empty ns problem https://github.com/ros/ros_comm/issues/360 -->
 
@@ -12,6 +14,8 @@
             <arg name="enable_odom_tf" value="$(arg enable_odom_tf)" />
             <arg name="urg" value="$(arg urg)" />
             <arg name="lidar_frame" value="$(arg lidar_frame)" />
+            <arg name="initial_motor_power" value="$(arg initial_motor_power)" />
+            <arg name="diff_drive_controller" value="$(arg diff_drive_controller)" />
         </include>
     </group>
     <group unless="$(eval arg('namespace') == 'null')" ns="$(arg namespace)">
@@ -19,6 +23,8 @@
             <arg name="enable_odom_tf" value="$(arg enable_odom_tf)" />
             <arg name="urg" value="$(arg urg)" />
             <arg name="lidar_frame" value="$(arg lidar_frame)" />
+            <arg name="initial_motor_power" value="$(arg initial_motor_power)" />
+            <arg name="diff_drive_controller" value="$(arg diff_drive_controller)" />
         </include>
     </group>
 </launch>
