@@ -63,6 +63,14 @@ catkin_install_python(PROGRAMS scripts/buzzer.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+# Mark tests for installation
+install(DIRECTORY test
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+catkin_install_python(PROGRAMS test/test_buzzer.py test/test_lightsensors.py test/test_motors.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 #############
 ## Testing ##
 #############
