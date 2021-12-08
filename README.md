@@ -24,8 +24,8 @@
 
 ROSとLinux OSは以下の組み合わせでのみ確認しています
 
-ROS Melodic + Ubuntu 18.04
-ROS Noetic + Ubuntu 20.04
+* ROS Melodic + Ubuntu 18.04
+* ROS Noetic + Ubuntu 20.04
 
 ## Installation
 
@@ -162,20 +162,48 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
   `lightsensors`トピックの配信周期を指定します。
 
 
-[diff_drive_controller](https://wiki.ros.org/diff_drive_controller)のパラメータは[raspimouse_control/config/raspimouse_control.yaml](raspimouse_control/config/raspimouse_control.yaml)にて定義しています。
+[diff_drive_controller](https://wiki.ros.org/diff_drive_controller)のパラメータは[raspimouse_control/config/raspimouse_control.yaml](raspimouse_control/config/raspimouse_control.yaml)にて定義しています。  
+パラメータの詳しい情報は[ROS wikiの解説](https://wiki.ros.org/diff_drive_controller)を参照してください。
 
 - `diff_drive_controller/base_frame_id`
+
+  Type: `string`
+
+  オドメトリとtfにて`child_frame`として設定するフレームの名前を指定します
+
 - `diff_drive_controller/odom_frame_id`
+
+  Type: `string`
+
+  オドメトリを配信する際のフレームの名前を指定します。
+
 - `diff_drive_controller/left_wheel`
+
+  Type: `string`
+
+  左の車輪のジョイント名を指定します。
+
 - `diff_drive_controller/right_wheel`
 
-  tfに必要なリンクの名前を指定します。
+  Type: `string`
+
+  右の車輪のジョイント名を指定します。
+
+- `diff_drive_controller/enable_odom_tf`
+
+  Type: `bool`
+
+  オドメトリをtfに配信するかどうかを指定します。
 
 - `diff_drive_controller/wheel_radius`
+
+  Type: `double`
 
   ロボットのホイールの半径（単位 mm）を指定します。
 
 - `diff_drive_controller/wheel_separation`
+
+  Type: `double`
 
   ロボットのホイールのトレッド（単位 mm）を指定します。
 
