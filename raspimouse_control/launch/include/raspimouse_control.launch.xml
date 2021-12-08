@@ -14,10 +14,10 @@
 
     <!-- raspimouse motor control nodes -->
     <rosparam command="load" file="$(find raspimouse_control)/config/raspimouse_control.yaml" />
-    <rosparam subst_value="true">
+    <arg name="diff_drive_controller" default="diff_drive_controller" />
+    <rosparam subst_value="true" ns="$(arg diff_drive_controller)">
         enable_odom_tf: $(arg enable_odom_tf)
     </rosparam>
-    <arg name="diff_drive_controller" default="diff_drive_controller" />
     <node name="controller_spawer" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="$(arg diff_drive_controller) joint_state_controller" />
 
     <arg name="initial_motor_power" default="on" />
