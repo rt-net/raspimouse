@@ -19,8 +19,7 @@
 - Device Driver
   - [rt-net/RaspberryPiMouse](https://github.com/rt-net/RaspberryPiMouse)
 - ROS
-  - [Melodic Morenia](https://wiki.ros.org/melodic)
-  - [Noetic Ninjemys](https://wiki.ros.org/noetic)
+  - [Melodic Morenia](https://wiki.ros.org/melodic) / [Noetic Ninjemys](https://wiki.ros.org/noetic)
 
 ROSとLinux OSは以下の組み合わせでのみ確認しています
 
@@ -169,7 +168,7 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
   Type: `string`
 
-  オドメトリとtfにて`child_frame`として設定するフレームの名前を指定します
+  `odom`と`tf`にてオドメトリの`child_frame`として設定するフレームの名前を指定します
 
 - `diff_drive_controller/odom_frame_id`
 
@@ -207,6 +206,7 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
   ロボットのホイールのトレッド（単位 mm）を指定します。
 
+![](https://rt-net.github.io/images/raspberry-pi-mouse/raspimouse_control_rqt_graph.png)
 
 ## License
 
