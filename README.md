@@ -47,10 +47,17 @@ $ git clone -b $ROS_DISTRO-devel https://github.com/rt-net/raspimouse
 # 依存パッケージのインストール
 $ rosdep install -r -y -i --from-paths raspimouse
 
+# もしraspimouse_descriptionパッケージがない場合は以下も実行
+$ git clone -b $ROS_DISTRO-devel https://github.com/rt-net/raspimouse_description
+$ rosdep install -r -y -i --from-paths raspimouse_description
+
 # ビルド＆インストール
-$ catkin build
+$ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
 ```
+
+※raspimouse_ros_2と併用する場合、catkin_make時に`See documentation for policy CMP0002 for more details`というメッセージとともにエラーが出る場合があります。  
+詳しくは[rt-net/raspimouse#1のコメント](https://github.com/rt-net/raspimouse/pull/1#issuecomment-990709564)を参照してください。
 
 ## QuickStart
 
