@@ -68,7 +68,7 @@ $ roslaunch raspimouse_bringup raspimouse_robot.launch
 
 # 端末 2
 # モータの回転
-$ rosservice call /motor_power std_srvs/SetBool '{data: true}'
+$ rosservice call /motor_on
 $ rostopic pub -1 /cmd_vel geometry_msgs/Twist '{linear: {x: 0.05, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0.05}}'
 ```
 
