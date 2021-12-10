@@ -32,11 +32,17 @@ add_executable(motors src/motors.cpp src/raspimouse_hardware.cpp)
 add_executable(buttons src/buttons.cpp)
 add_executable(lightsensors src/lightsensors.cpp)
 
-## Specify libraries to link a library or executable target against
+# Specify libraries to link a library or executable target against
 target_link_libraries(motors ${catkin_LIBRARIES})
 target_link_libraries(leds ${catkin_LIBRARIES})
 target_link_libraries(buttons ${catkin_LIBRARIES})
 target_link_libraries(lightsensors ${catkin_LIBRARIES})
+
+# Specify dependencies
+add_dependencies(leds raspimouse_msgs_generate_messages_cpp)
+add_dependencies(motors raspimouse_msgs_generate_messages_cpp)
+add_dependencies(buttons raspimouse_msgs_generate_messages_cpp)
+add_dependencies(lightsensors raspimouse_msgs_generate_messages_cpp)
 
 #############
 ## Install ##
