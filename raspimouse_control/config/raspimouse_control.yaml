@@ -17,10 +17,10 @@ diff_drive_controller:
 
   cmd_vel_timeout: 1.0 #default 0.5
 
-  # "enable_odom_tf" is defined in control.launch
+  # "enable_odom_tf" and "*_frame_id" are defined in raspimouse_control.launch
   # enable_odom_tf: true
-  base_frame_id: base_footprint
-  odom_frame_id: odom
+  # base_frame_id: base_footprint
+  # odom_frame_id: odom
 
   # Velocity and acceleration limits
   # Whenever a min_* is unspecified, default to -max_*

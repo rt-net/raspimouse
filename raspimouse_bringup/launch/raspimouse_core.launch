@@ -8,7 +8,7 @@
     <arg name="diff_drive_controller" default="diff_drive_controller" />
 
     <!-- raspimouse control nodes -->
-    <include file="$(find raspimouse_control)/launch/control.launch">
+    <include file="$(find raspimouse_control)/launch/raspimouse_control.launch">
         <arg name="namespace" default="$(arg namespace)" />
         <arg name="enable_odom_tf" value="$(arg enable_odom_tf)" />
         <arg name="initial_motor_power" value="$(arg initial_motor_power)" />
@@ -19,6 +19,7 @@
     <group ns="$(arg namespace)">
         <!-- raspimouse urdf description -->
         <include file="$(find raspimouse_description)/launch/display_xacro.launch">
+            <arg name="namespace" default="$(arg namespace)" />
             <arg name="use_rviz" value="false" />
             <arg name="urg" value="$(arg urg)" />
             <arg name="lidar_frame" value="$(arg lidar_frame)" />

@@ -24,19 +24,22 @@ RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh)
   std::fill_n(pos, 2, 0.0);
   std::fill_n(vel, 2, 0.0);
   std::fill_n(eff, 2, 0.0);
+  nh.getParam("diff_drive_controller/right_wheel", right_wheel_joint_);
+  nh.getParam("diff_drive_controller/left_wheel", left_wheel_joint_);
+  ROS_INFO("right_wheel_joint: %s, left_wheel_joint: %s", right_wheel_joint_.c_str(), left_wheel_joint_.c_str());
 
-  hardware_interface::JointStateHandle state_right_wheel_handle("right_wheel_joint", &pos[0], &vel[0], &eff[0]);
+  hardware_interface::JointStateHandle state_right_wheel_handle(right_wheel_joint_, &pos[0], &vel[0], &eff[0]);
   joint_state_interface.registerHandle(state_right_wheel_handle);
 
-  hardware_interface::JointStateHandle state_left_wheel_handle("left_wheel_joint", &pos[1], &vel[1], &eff[1]);
+  hardware_interface::JointStateHandle state_left_wheel_handle(left_wheel_joint_, &pos[1], &vel[1], &eff[1]);
   joint_state_interface.registerHandle(state_left_wheel_handle);
 
   registerInterface(&joint_state_interface);
 
-  hardware_interface::JointHandle vel_right_wheel_handle(joint_state_interface.getHandle("right_wheel_joint"), &cmd[0]);
+  hardware_interface::JointHandle vel_right_wheel_handle(joint_state_interface.getHandle(right_wheel_joint_), &cmd[0]);
   joint_vel_interface.registerHandle(vel_right_wheel_handle);
 
-  hardware_interface::JointHandle vel_left_wheel_handle(joint_state_interface.getHandle("left_wheel_joint"), &cmd[1]);
+  hardware_interface::JointHandle vel_left_wheel_handle(joint_state_interface.getHandle(left_wheel_joint_), &cmd[1]);
   joint_vel_interface.registerHandle(vel_left_wheel_handle);
 
   registerInterface(&joint_vel_interface);

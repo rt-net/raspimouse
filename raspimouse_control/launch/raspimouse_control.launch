@@ -17,8 +17,12 @@
 
         <!-- raspimouse motor control nodes -->
         <rosparam command="load" file="$(find raspimouse_control)/config/raspimouse_control.yaml" />
+        <arg name="tf_namespace" value="" if="$(eval arg('namespace') == '/')" />
+        <arg name="tf_namespace" value="$(arg namespace)/" unless="$(eval arg('namespace') == '/')" />
         <rosparam subst_value="true" ns="$(arg diff_drive_controller)">
             enable_odom_tf: $(arg enable_odom_tf)
+            base_frame_id: $(arg tf_namespace)base_footprint
+            odom_frame_id: $(arg tf_namespace)odom
         </rosparam>
         <node name="controller_spawer" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="$(arg diff_drive_controller) joint_state_controller" />
 

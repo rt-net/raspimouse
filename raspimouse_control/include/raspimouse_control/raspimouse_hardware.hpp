@@ -37,4 +37,6 @@ private:
   double vel[2];
   double eff[2];
   double wheel_radius_;
+  std::string right_wheel_joint_ = "right_wheel_joint";
+  std::string left_wheel_joint_ = "left_wheel_joint";
 };
