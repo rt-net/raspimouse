@@ -59,10 +59,11 @@ void RaspberryPiMouseHW::read(ros::Duration d)
 
 void RaspberryPiMouseHW::write()
 {
+  static int previous_left, previous_right;
   int left, right;
-  std::ofstream ofsL("/dev/rtmotor_raw_l0");
-  std::ofstream ofsR("/dev/rtmotor_raw_r0");
-  if ((not ofsL.is_open()) or (not ofsR.is_open()))
+  std::ofstream ofs_left("/dev/rtmotor_raw_l0");
+  std::ofstream ofs_right("/dev/rtmotor_raw_r0");
+  if ((not ofs_left.is_open()) or (not ofs_right.is_open()))
   {
     ROS_ERROR("Cannot open /dev/rtmotor_raw_{l,r}0");
     return;
@@ -71,6 +72,10 @@ void RaspberryPiMouseHW::write()
   left = (int)round(cmd[1] / (2.0 * 3.14159 * wheel_radius_ / 400.0) / 1000 * 24);
   right = (int)round(cmd[0] / (2.0 * 3.14159 * wheel_radius_ / 400.0) / 1000 * 24);
   // ROS_INFO("left=%d right=%d %f ", left, right, wheel_radius_);
-  ofsL << left << std::endl;
-  ofsR << right << std::endl;
+  if (previous_left != left)
+    ofs_left << left << std::endl;
+  if (previous_left != left)
+    ofs_right << right << std::endl;
+  previous_left = left;
+  previous_right = right;
 };
