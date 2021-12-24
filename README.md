@@ -161,7 +161,7 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
 主要なパラメータの一覧です。
 
-- `light_sensors/frequency`
+- `lightsensors/frequency`
 
   Type: `int`
 
