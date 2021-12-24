@@ -120,20 +120,20 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
   本体前方のLEDの制御用トピックです。4つのLEDの状態を指定します。
 
-- `lightsensors`
-
-  Type: `raspimouse_msgs/LightSensorValues`
-
-  本体前方のLEDの制御用トピックです。4つのLEDの状態を指定します。
-
-
 ### Published
 
 - `buttons`
 
   Type: `raspimouse_msgs/ButtonValues`
 
-  本体上部のタクトスイッチのステータス配信用トピックです。
+  本体上部のタクトスイッチのステータス配信用トピックです。  
+  メッセージ内の`*_toggle`データは0.5秒程度ボタンを長押しするとTrue/Falseが切り替わります。
+
+- `lightsensors`
+
+  Type: `raspimouse_msgs/LightSensorValues`
+
+  本体前方の距離センサのデータ配信用トピックです。
 
 - `odom`
 
