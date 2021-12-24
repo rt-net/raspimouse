@@ -57,7 +57,7 @@ $ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
 ```
 
-※raspimouse_ros_2と併用する場合、catkin_make時に`See documentation for policy CMP0002 for more details`というメッセージとともにエラーが出る場合があります。  
+※[ryuichiueda/raspimouse_ros_2](https://github.com/ryuichiueda/raspimouse_ros_2)と併用する場合、catkin_make時に`See documentation for policy CMP0002 for more details`というメッセージとともにエラーが出る場合があります。  
 詳しくは[rt-net/raspimouse#1のコメント](https://github.com/rt-net/raspimouse/pull/1#issuecomment-990709564)を参照してください。
 
 ## QuickStart
