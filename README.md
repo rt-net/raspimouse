@@ -215,7 +215,7 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
   ロボットのホイールのトレッド（単位 m）を指定します。
 
-![](https://rt-net.github.io/images/raspberry-pi-mouse/raspimouse_control_rqt_graph.png)
+[![](https://rt-net.github.io/images/raspberry-pi-mouse/raspimouse_control_rqt_graph.png)](https://rt-net.github.io/images/raspberry-pi-mouse/raspimouse_control_rqt_graph.png)
 
 ## License
 
