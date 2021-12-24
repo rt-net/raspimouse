@@ -207,7 +207,7 @@ raspimouse_controlで用いるROS Message定義ROSパッケージです。
 
   Type: `double`
 
-  ロボットのホイールの半径（単位 mm）を指定します。
+  ロボットのホイールの半径（単位 m）を指定します。
 
 - `diff_drive_controller/wheel_separation`
 
