@@ -52,6 +52,7 @@ $ git clone -b $ROS_DISTRO-devel https://github.com/rt-net/raspimouse_descriptio
 $ rosdep install -r -y -i --from-paths raspimouse_description
 
 # ビルド＆インストール
+$ cd ~/catkin_ws
 $ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
 ```
