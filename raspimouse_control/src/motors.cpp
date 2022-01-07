@@ -94,7 +94,7 @@ int main(int argc, char** argv)
   RaspberryPiMouseHW raspimouse(nh);
   controller_manager::ControllerManager cm(&raspimouse, nh);
 
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(30);
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
