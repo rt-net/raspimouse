@@ -48,7 +48,7 @@ class MotorTest(unittest.TestCase):
 
         self._odom = Odometry()
 
-    def __get_subscribers(self, topic_path):
+    def _get_subscribers(self, topic_path):
         ros_master = rosgraph.Master('/rostopic')
         topic_path = rosgraph.names.script_resolve_name('rostopic', topic_path)
         state = ros_master.getSystemState()
@@ -61,7 +61,7 @@ class MotorTest(unittest.TestCase):
     def _get_publisher(self, topic_path, msg_type, **kwargs):
         # wait until the number of connections would be same as ros master
         pub = rospy.Publisher(topic_path, msg_type, **kwargs)
-        num_subs = len(self.__get_subscribers(topic_path))
+        num_subs = len(self._get_subscribers(topic_path))
         for i in range(20):
             num_cons = pub.get_num_connections()
             if num_cons == num_subs:
@@ -72,8 +72,8 @@ class MotorTest(unittest.TestCase):
     def _file_check(self, dev, value, message):
         with open("/dev/" + dev, "r") as f:
             s = f.readline()
-            self.assertEqual(s, str(value)+"\n",
-                             "{}, value: {}".format(message, s))
+        self.assertEqual(s, str(value)+"\n",
+                         "{}, value: {}".format(message, s))
 
     def test_node_exist(self):
         nodes = rosnode.get_node_names()

@@ -39,7 +39,7 @@ class BuzzerTest(unittest.TestCase):
         self.client = actionlib.SimpleActionClient("music", MusicAction)
         self.device_values = []
 
-    def __get_subscribers(self, topic_path):
+    def _get_subscribers(self, topic_path):
         ros_master = rosgraph.Master('/rostopic')
         topic_path = rosgraph.names.script_resolve_name('rostopic', topic_path)
         state = ros_master.getSystemState()
@@ -52,7 +52,7 @@ class BuzzerTest(unittest.TestCase):
     def _get_publisher(self, topic_path, msg_type, **kwargs):
         # wait until the number of connections would be same as ros master
         pub = rospy.Publisher(topic_path, msg_type, **kwargs)
-        num_subs = len(self.__get_subscribers(topic_path))
+        num_subs = len(self._get_subscribers(topic_path))
         for i in range(20):
             num_cons = pub.get_num_connections()
             if num_cons == num_subs:
@@ -72,13 +72,13 @@ class BuzzerTest(unittest.TestCase):
 
         with open("/dev/rtbuzzer0", "r") as f:
             data = f.readline()
-            self.assertEqual(
-                data, "1234\n", "value does not written to rtbuzzer0")
+        self.assertEqual(
+            data, "1234\n", "value does not written to rtbuzzer0")
 
     def feedback_cb(self, feedback):
         with open("/dev/rtbuzzer0", "r") as f:
             data = f.readline()
-            self.device_values.append(int(data.rstrip()))
+        self.device_values.append(int(data.rstrip()))
 
 
 if __name__ == '__main__':
