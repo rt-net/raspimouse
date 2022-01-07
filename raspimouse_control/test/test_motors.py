@@ -80,7 +80,8 @@ class MotorTest(unittest.TestCase):
         self.assertIn('/motors', nodes, "node does not exist")
 
     def test_put_cmd_vel(self):
-        pub = self._get_publisher('/diff_drive_controller/cmd_vel', Twist)
+        pub = self._get_publisher(
+            '/diff_drive_controller/cmd_vel', Twist, queue_size=10)
         m = Twist()
         # rtmotor_raw_value = (400/(48*math.pi/1000))*m.linear.x
         m.linear.x = 0.1508

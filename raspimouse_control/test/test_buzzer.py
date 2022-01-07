@@ -65,7 +65,7 @@ class BuzzerTest(unittest.TestCase):
         self.assertIn('/buzzer', nodes, "node does not exist")
 
     def test_put_value(self):
-        pub = self._get_publisher('/buzzer', UInt16)
+        pub = self._get_publisher('/buzzer', UInt16, queue_size=10)
         for i in range(10):
             pub.publish(1234)
             time.sleep(0.1)
