@@ -19,6 +19,9 @@
 #include <fstream>
 #include "raspimouse_control/raspimouse_hardware.hpp"
 
+const static int RIGHT= 0;
+const static int LEFT = 1;
+
 RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh)
 {
   std::fill_n(pos, 2, 0.0);
@@ -28,33 +31,37 @@ RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh)
   nh.getParam("diff_drive_controller/left_wheel", left_wheel_joint_);
   ROS_INFO("right_wheel_joint: %s, left_wheel_joint: %s", right_wheel_joint_.c_str(), left_wheel_joint_.c_str());
 
-  hardware_interface::JointStateHandle state_right_wheel_handle(right_wheel_joint_, &pos[0], &vel[0], &eff[0]);
+  hardware_interface::JointStateHandle state_right_wheel_handle(right_wheel_joint_, &pos[RIGHT], &vel[RIGHT], &eff[RIGHT]);
   joint_state_interface.registerHandle(state_right_wheel_handle);
 
-  hardware_interface::JointStateHandle state_left_wheel_handle(left_wheel_joint_, &pos[1], &vel[1], &eff[1]);
+  hardware_interface::JointStateHandle state_left_wheel_handle(left_wheel_joint_, &pos[LEFT], &vel[LEFT], &eff[LEFT]);
   joint_state_interface.registerHandle(state_left_wheel_handle);
 
   registerInterface(&joint_state_interface);
 
-  hardware_interface::JointHandle vel_right_wheel_handle(joint_state_interface.getHandle(right_wheel_joint_), &cmd[0]);
+  hardware_interface::JointHandle vel_right_wheel_handle(joint_state_interface.getHandle(right_wheel_joint_), &cmd[RIGHT]);
   joint_vel_interface.registerHandle(vel_right_wheel_handle);
 
-  hardware_interface::JointHandle vel_left_wheel_handle(joint_state_interface.getHandle(left_wheel_joint_), &cmd[1]);
+  hardware_interface::JointHandle vel_left_wheel_handle(joint_state_interface.getHandle(left_wheel_joint_), &cmd[LEFT]);
   joint_vel_interface.registerHandle(vel_left_wheel_handle);
 
   registerInterface(&joint_vel_interface);
 
-  nh.getParam("diff_drive_controller/wheel_radius", wheel_radius_);
+  if (nh.getParam("diff_drive_controller/wheel_radius", wheel_radius_))
+  {
+    ROS_INFO("Cannot get wheel_radius param, the default value is assumed");
+    wheel_radius_ = 0.024;
+  }
   ROS_INFO("wheel_radius: %f", wheel_radius_);
 }
 
 void RaspberryPiMouseHW::read(ros::Duration d)
 {
-  pos[0] += vel[0] * d.nsec / 1000000000;
-  vel[0] = cmd[0];
-  pos[1] += vel[1] * d.nsec / 1000000000;
-  vel[1] = cmd[1];
-  // ROS_INFO("cmd=%u %f %f  %f %f", d.nsec, cmd[0], cmd[1], pos[0], pos[1]);
+  pos[RIGHT] += vel[RIGHT] * d.nsec / 1000000000;
+  vel[RIGHT] = cmd[RIGHT];
+  pos[LEFT] += vel[LEFT] * d.nsec / 1000000000;
+  vel[LEFT] = cmd[LEFT];
+  ROS_INFO("cmd=%u %f %f  %f %f", d.nsec, cmd[RIGHT], cmd[LEFT], pos[RIGHT], pos[LEFT]);
 };
 
 void RaspberryPiMouseHW::write()
@@ -64,8 +71,12 @@ void RaspberryPiMouseHW::write()
   std::ofstream ofs_left;
   std::ofstream ofs_right;
 
-  left_freq = (int)round(cmd[1] / (2.0 * M_PI * wheel_radius_ / 400.0) / 1000 * 24);
-  right_freq = (int)round(cmd[0] / (2.0 * M_PI * wheel_radius_ / 400.0) / 1000 * 24);
+  // cmd[] is given as wheel angular velocity (rad/sec)
+  // motor : 400 pluse/rotate
+  // cmd / (2.0 * M_PI) : taget speed (rotate/sec)
+  // cmd / (2.0 * M_PI) * 400 : taget speed (pulse/sec)
+  left_freq = (int)round(cmd[LEFT] / (2.0 * M_PI) * 400.0);
+  right_freq = (int)round(cmd[RIGHT] / (2.0 * M_PI) * 400.0);
 
   // ROS_INFO("left=%d right=%d %f ", left_freq, right_freq, wheel_radius_);
 
