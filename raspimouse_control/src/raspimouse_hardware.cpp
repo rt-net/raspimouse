@@ -63,11 +63,6 @@ void RaspberryPiMouseHW::write()
   int left_freq, right_freq;
   std::ofstream ofs_left;
   std::ofstream ofs_right;
-  if ((not ofs_left.is_open()) or (not ofs_right.is_open()))
-  {
-    ROS_ERROR("Cannot open /dev/rtmotor_raw_{l,r}0");
-    return;
-  }
 
   left_freq = (int)round(cmd[1] / (2.0 * M_PI * wheel_radius_ / 400.0) / 1000 * 24);
   right_freq = (int)round(cmd[0] / (2.0 * M_PI * wheel_radius_ / 400.0) / 1000 * 24);
@@ -76,14 +71,31 @@ void RaspberryPiMouseHW::write()
 
   // The buzzer and motor are using the common Raspberry Pi PWM function.
   // Write the PWM frequency only if there is new command value for the motor.
+  // Raspberry PiのPWM機能はブザーとモータで共通に使用される。
+  // そのため、モータの指示値がない場合は、PWM周波数を書き込まない。
   if (previous_left != left_freq)
+  {
     ofs_left.open("/dev/rtmotor_raw_l0");
+    if (not ofs_left.is_open())
+    {
+      ROS_ERROR("Cannot open /dev/rtmotor_raw_l0");
+      return;
+    }
     ofs_left << left_freq << std::endl;
     ofs_left.close();
+  }
+
   if (previous_left != left_freq)
+  {
     ofs_right.open("/dev/rtmotor_raw_r0");
+    if (not ofs_right.is_open())
+    {
+      ROS_ERROR("Cannot open /dev/rtmotor_raw_r0");
+      return;
+    }
     ofs_right << right_freq << std::endl;
     ofs_right.close();
+  }
   previous_left = left_freq;
   previous_right = right_freq;
 };
