@@ -47,11 +47,7 @@ RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh)
 
   registerInterface(&joint_vel_interface);
 
-  if (nh.getParam("diff_drive_controller/wheel_radius", wheel_radius_))
-  {
-    ROS_INFO("Cannot get wheel_radius param, the default value is assumed");
-    wheel_radius_ = 0.024;
-  }
+  nh.getParam("diff_drive_controller/wheel_radius", wheel_radius_);
   ROS_INFO("wheel_radius: %f", wheel_radius_);
 }
 
@@ -61,7 +57,7 @@ void RaspberryPiMouseHW::read(ros::Duration d)
   vel[RIGHT] = cmd[RIGHT];
   pos[LEFT] += vel[LEFT] * d.nsec / 1000000000;
   vel[LEFT] = cmd[LEFT];
-  ROS_INFO("cmd=%u %f %f  %f %f", d.nsec, cmd[RIGHT], cmd[LEFT], pos[RIGHT], pos[LEFT]);
+  // ROS_INFO("cmd=%u %f %f  %f %f", d.nsec, cmd[RIGHT], cmd[LEFT], pos[RIGHT], pos[LEFT]);
 };
 
 void RaspberryPiMouseHW::write()
