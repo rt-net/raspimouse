@@ -27,6 +27,11 @@
 #include <ros/package.h>
 #include "raspimouse_msgs/LedValues.h"
 
+std::string led0_device_file = "/dev/rtled0";
+std::string led1_device_file = "/dev/rtled1";
+std::string led2_device_file = "/dev/rtled2";
+std::string led3_device_file = "/dev/rtled3";
+
 void output(std::ofstream* ofs, bool input)
 {
   *ofs << (input ? '1' : '0') << std::endl;
@@ -34,21 +39,28 @@ void output(std::ofstream* ofs, bool input)
 
 void cb(const raspimouse_msgs::LedValues::ConstPtr& msg)
 {
-  std::ofstream ofs0("/dev/rtled0");
+  std::ofstream ofs0(led0_device_file);
   output(&ofs0, msg->right_side);
-  std::ofstream ofs1("/dev/rtled1");
+  std::ofstream ofs1(led1_device_file);
   output(&ofs1, msg->right_forward);
-  std::ofstream ofs2("/dev/rtled2");
+  std::ofstream ofs2(led2_device_file);
   output(&ofs2, msg->left_forward);
-  std::ofstream ofs3("/dev/rtled3");
+  std::ofstream ofs3(led3_device_file);
   output(&ofs3, msg->left_side);
 }
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "raspimouse_leds_node");
-  ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("leds", 10, cb);
+  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
+
+  pnh.getParam("device_file_0", led0_device_file);
+  pnh.getParam("device_file_1", led1_device_file);
+  pnh.getParam("device_file_2", led2_device_file);
+  pnh.getParam("device_file_3", led3_device_file);
+
+  ros::Subscriber sub = nh.subscribe("leds", 10, cb);
 
   ros::spin();
   exit(0);

@@ -12,9 +12,11 @@ import actionlib
 from std_msgs.msg import UInt16
 from raspimouse_msgs.msg import MusicAction, MusicResult, MusicFeedback
 
+DEVICE_FILE = "/dev/rtbuzzer0"
+
 
 def write_freq(hz=0):
-    bfile = "/dev/rtbuzzer0"
+    bfile = DEVICE_FILE
     try:
         with open(bfile, "w") as f:
             f.write(str(hz) + "\n")
@@ -47,11 +49,14 @@ def recv_buzzer(data):
     write_freq(data.data)
 
 
-if __name__ == '__main__':
-    rospy.init_node('buzzer')
+if __name__ == "__main__":
+    rospy.init_node("buzzer")
+
+    DEVICE_FILE = rospy.get_param("~device_file", "/dev/rtbuzzer0")
+
     rospy.Subscriber("buzzer", UInt16, recv_buzzer)
     music = actionlib.SimpleActionServer(
-        'music', MusicAction, exec_music, False
+        "music", MusicAction, exec_music, False
         )
     music.start()
     rospy.on_shutdown(write_freq)

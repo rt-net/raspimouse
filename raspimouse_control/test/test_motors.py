@@ -38,6 +38,10 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 from nav_msgs.msg import Odometry
 
+DEVICE_FILE_MOTOR_SW = '/dev/rtmotoren0'
+DEVICE_FILE_RIGHT_MOTOR = '/dev/rtmotor_raw_r0'
+DEVICE_FILE_LEFT_MOTOR = '/dev/rtmotor_raw_l0'
+
 
 class MotorTest(unittest.TestCase):
     def setUp(self):
@@ -69,8 +73,8 @@ class MotorTest(unittest.TestCase):
             time.sleep(0.1)
         self.fail("failed to get publisher")
 
-    def _file_check(self, dev, value, message):
-        with open("/dev/" + dev, "r") as f:
+    def _file_check(self, file, value, message):
+        with open(file, "r") as f:
             s = f.readline()
         self.assertEqual(s, str(value)+"\n",
                          "{}, value: {}".format(message, s))
@@ -91,21 +95,21 @@ class MotorTest(unittest.TestCase):
             pub.publish(m)
             time.sleep(0.1)
 
-        self._file_check("rtmotor_raw_l0", 200,
+        self._file_check(DEVICE_FILE_LEFT_MOTOR, 200,
                          "wrong left value from cmd_vel")
-        self._file_check("rtmotor_raw_r0", 600,
+        self._file_check(DEVICE_FILE_RIGHT_MOTOR, 600,
                          "wrong right value from cmd_vel")
 
         time.sleep(1.1)
-        self._file_check("rtmotor_raw_r0", 0, "don't stop after 1[s]")
-        self._file_check("rtmotor_raw_l0", 0, "don't stop after 1[s]")
+        self._file_check(DEVICE_FILE_LEFT_MOTOR, 0, "don't stop after 1[s]")
+        self._file_check(DEVICE_FILE_RIGHT_MOTOR, 0, "don't stop after 1[s]")
 
     def test_on_off(self):
         off = rospy.ServiceProxy('/motor_off', Trigger)
         ret = off()
         self.assertEqual(ret.success, True, "motor off does not succeeded")
         self.assertEqual(ret.message, "OFF", "motor off wrong message")
-        with open("/dev/rtmotoren0", "r") as f:
+        with open(DEVICE_FILE_MOTOR_SW, "r") as f:
             data = f.readline()
             self.assertEqual(
                 data, "0\n", "wrong value in rtmotor0 at motor off")
@@ -114,7 +118,7 @@ class MotorTest(unittest.TestCase):
         ret = on()
         self.assertEqual(ret.success, True, "motor on does not succeeded")
         self.assertEqual(ret.message, "ON", "motor on wrong message")
-        with open("/dev/rtmotoren0", "r") as f:
+        with open(DEVICE_FILE_MOTOR_SW, "r") as f:
             data = f.readline()
             self.assertEqual(
                 data, "1\n", "wrong value in rtmotor0 at motor on")
@@ -122,4 +126,10 @@ class MotorTest(unittest.TestCase):
 
 if __name__ == '__main__':
     rospy.init_node('test_motors')
+    DEVICE_FILE_MOTOR_SW = rospy.get_param(
+        '~device_file_motor_sw', '/tmp/rtmotoren0')
+    DEVICE_FILE_LEFT_MOTOR = rospy.get_param(
+        '~device_file_left_motor', '/tmp/rtmotor_raw_l0')
+    DEVICE_FILE_RIGHT_MOTOR = rospy.get_param(
+        '~device_file_right_motor', '/tmp/rtmotor_raw_r0')
     rostest.rosrun('raspimouse_control', 'test_motors', MotorTest)

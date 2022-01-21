@@ -24,7 +24,7 @@
 class RaspberryPiMouseHW : public hardware_interface::RobotHW
 {
 public:
-  RaspberryPiMouseHW(ros::NodeHandle);
+  RaspberryPiMouseHW(ros::NodeHandle nh, ros::NodeHandle pnh);
   // ~RaspberryPiMouseHW();
   void read(ros::Duration d);
   void write();
@@ -39,4 +39,6 @@ private:
   double wheel_radius_;
   std::string right_wheel_joint_ = "right_wheel_joint";
   std::string left_wheel_joint_ = "left_wheel_joint";
+  std::string right_motor_device_file_ = "/dev/rtmotor_raw_r0";
+  std::string left_motor_device_file_ = "/dev/rtmotor_raw_l0";
 };

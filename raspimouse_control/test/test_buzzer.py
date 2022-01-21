@@ -33,6 +33,8 @@ import time
 from std_msgs.msg import UInt16
 from raspimouse_msgs.msg import MusicAction
 
+DEVICE_FILE = '/dev/rtbuzzer0'
+
 
 class BuzzerTest(unittest.TestCase):
     def setUp(self):
@@ -70,13 +72,13 @@ class BuzzerTest(unittest.TestCase):
             pub.publish(1234)
             time.sleep(0.1)
 
-        with open("/dev/rtbuzzer0", "r") as f:
+        with open(DEVICE_FILE, "r") as f:
             data = f.readline()
         self.assertEqual(
-            data, "1234\n", "value does not written to rtbuzzer0")
+            data, "1234\n", "value does not written to " + DEVICE_FILE)
 
     def feedback_cb(self, feedback):
-        with open("/dev/rtbuzzer0", "r") as f:
+        with open(DEVICE_FILE, "r") as f:
             data = f.readline()
         self.device_values.append(int(data.rstrip()))
 
@@ -84,4 +86,5 @@ class BuzzerTest(unittest.TestCase):
 if __name__ == '__main__':
     time.sleep(3)
     rospy.init_node('test_buzzer')
+    DEVICE_FILE = rospy.get_param('~device_file', '/tmp/rtbuzzer0')
     rostest.rosrun('raspimouse_control', 'test_buzzer', BuzzerTest)

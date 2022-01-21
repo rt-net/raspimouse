@@ -27,6 +27,8 @@
 #include <ros/package.h>
 #include "raspimouse_msgs/LightSensorValues.h"
 
+std::string lightsensor_device_file = "/dev/rtlightsensor0";
+
 int getFrequency(int old, ros::NodeHandle* n)
 {
   int f;
@@ -39,9 +41,12 @@ int getFrequency(int old, ros::NodeHandle* n)
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "raspimouse_lightsensors_node");
-  ros::NodeHandle n("~");
+  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
 
-  ros::Publisher pub = n.advertise<raspimouse_msgs::LightSensorValues>("/lightsensors", 5);
+  pnh.getParam("device_file", lightsensor_device_file);
+
+  ros::Publisher pub = nh.advertise<raspimouse_msgs::LightSensorValues>("/lightsensors", 5);
 
   int freq = 10;
 
@@ -54,7 +59,7 @@ int main(int argc, char** argv)
     if (c++ % freq == 0)
     {  // check the parapeter every 1[s]
       unsigned int old = freq;
-      freq = getFrequency(freq, &n);
+      freq = getFrequency(freq, &pnh);
       if (old != freq)
       {
         loop_rate = ros::Rate(freq);
@@ -62,7 +67,7 @@ int main(int argc, char** argv)
       }
     }
 
-    std::ifstream ifs("/dev/rtlightsensor0");
+    std::ifstream ifs(lightsensor_device_file);
     ifs >> msg.right_forward >> msg.right_side >> msg.left_side >> msg.left_forward;
 
     msg.sum_forward = msg.left_forward + msg.right_forward;

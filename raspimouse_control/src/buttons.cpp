@@ -27,9 +27,13 @@
 #include <ros/package.h>
 #include "raspimouse_msgs/ButtonValues.h"
 
-bool readButton(const char* name)
+std::string sw0_device_file = "/dev/rtswitch0";
+std::string sw1_device_file = "/dev/rtswitch1";
+std::string sw2_device_file = "/dev/rtswitch2";
+
+bool readButton(std::string fname)
 {
-  std::ifstream ifs(name);
+  std::ifstream ifs(fname);
   char c;
   ifs >> c;
   return c == '0';
@@ -38,18 +42,23 @@ bool readButton(const char* name)
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "buttons");
-  ros::NodeHandle n;
+  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
 
-  ros::Publisher pub = n.advertise<raspimouse_msgs::ButtonValues>("buttons", 5);
+  pnh.getParam("device_file_0", sw0_device_file);
+  pnh.getParam("device_file_1", sw1_device_file);
+  pnh.getParam("device_file_2", sw2_device_file);
+
+  ros::Publisher pub = nh.advertise<raspimouse_msgs::ButtonValues>("buttons", 5);
 
   ros::Rate loop_rate(10);
   raspimouse_msgs::ButtonValues msg;
   int c[3] = { 0, 0, 0 };
   while (ros::ok())
   {
-    msg.front = readButton("/dev/rtswitch0");
-    msg.mid = readButton("/dev/rtswitch1");
-    msg.rear = readButton("/dev/rtswitch2");
+    msg.front = readButton(sw0_device_file);
+    msg.mid = readButton(sw1_device_file);
+    msg.rear = readButton(sw2_device_file);
 
     c[0] = msg.front ? 1 + c[0] : 0;
     c[1] = msg.mid ? 1 + c[1] : 0;

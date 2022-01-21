@@ -30,6 +30,8 @@ import rospy
 import time
 from raspimouse_msgs.msg import LightSensorValues
 
+DEVICE_FILE = '/dev/rtlightsensor0'
+
 
 class LightsensorTest(unittest.TestCase):
     def setUp(self):
@@ -58,7 +60,7 @@ class LightsensorTest(unittest.TestCase):
     def test_get_value(self):
         rospy.set_param('/lightsensors/frequency', 10)  # センサの値取得の周期を10Hzに
         time.sleep(2)  # パラメータの反映を待つ
-        with open("/dev/rtlightsensor0", "w") as f:  # ダミーの値をダミーのファイルに
+        with open(DEVICE_FILE, "w") as f:  # ダミーの値をダミーのファイルに
             f.write("-1 0 123 4321\n")
 
         time.sleep(3)
@@ -79,4 +81,5 @@ class LightsensorTest(unittest.TestCase):
 if __name__ == '__main__':
     time.sleep(3)
     rospy.init_node('test_lightsensors')
+    DEVICE_FILE = rospy.get_param('~device_file', '/tmp/rtlightsensor0')
     rostest.rosrun('raspimouse_control', 'test_lightsensors', LightsensorTest)

@@ -22,13 +22,15 @@
 const static int RIGHT= 0;
 const static int LEFT = 1;
 
-RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh)
+RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh, ros::NodeHandle pnh)
 {
   std::fill_n(pos, 2, 0.0);
   std::fill_n(vel, 2, 0.0);
   std::fill_n(eff, 2, 0.0);
   nh.getParam("diff_drive_controller/right_wheel", right_wheel_joint_);
   nh.getParam("diff_drive_controller/left_wheel", left_wheel_joint_);
+  pnh.getParam("device_file_right_motor", right_motor_device_file_);
+  pnh.getParam("device_file_left_motor", left_motor_device_file_);
   ROS_INFO("right_wheel_joint: %s, left_wheel_joint: %s", right_wheel_joint_.c_str(), left_wheel_joint_.c_str());
 
   hardware_interface::JointStateHandle state_right_wheel_handle(right_wheel_joint_, &pos[RIGHT], &vel[RIGHT], &eff[RIGHT]);
@@ -82,10 +84,10 @@ void RaspberryPiMouseHW::write()
   // そのため、モータの指示値がない場合は、PWM周波数を書き込まない。
   if (previous_left != left_freq)
   {
-    ofs_left.open("/dev/rtmotor_raw_l0");
+    ofs_left.open(left_motor_device_file_);
     if (not ofs_left.is_open())
     {
-      ROS_ERROR("Cannot open /dev/rtmotor_raw_l0");
+      ROS_ERROR("Cannot open %s", left_motor_device_file_.c_str());
       return;
     }
     ofs_left << left_freq << std::endl;
@@ -94,10 +96,10 @@ void RaspberryPiMouseHW::write()
 
   if (previous_left != left_freq)
   {
-    ofs_right.open("/dev/rtmotor_raw_r0");
+    ofs_right.open(right_motor_device_file_);
     if (not ofs_right.is_open())
     {
-      ROS_ERROR("Cannot open /dev/rtmotor_raw_r0");
+      ROS_ERROR("Cannot open %s", right_motor_device_file_.c_str());
       return;
     }
     ofs_right << right_freq << std::endl;
