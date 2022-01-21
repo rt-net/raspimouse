@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <arg name="device_file_buzzer" value="/tmp/rtbuzzer0" />
-  <arg name="device_file_motor_sw" value="/tmp/rtmotoren0" />
-  <arg name="device_file_left_motor" value="/tmp/rtmotor_raw_l0" />
-  <arg name="device_file_right_motor" value="/tmp/rtmotor_raw_r0" />
-  <arg name="device_file_lightsensor" value="/tmp/lightsensor0" />
+  <arg name="device_file_buzzer" value="/dev/shm/rtbuzzer0" />
+  <arg name="device_file_motor_sw" value="/dev/shm/rtmotoren0" />
+  <arg name="device_file_left_motor" value="/dev/shm/rtmotor_raw_l0" />
+  <arg name="device_file_right_motor" value="/dev/shm/rtmotor_raw_r0" />
+  <arg name="device_file_lightsensor" value="/dev/shm/lightsensor0" />
 
   <include file="$(find raspimouse_control)/launch/raspimouse_control.launch">
     <arg name="device_file_buzzer" value="$(arg device_file_buzzer)" />
