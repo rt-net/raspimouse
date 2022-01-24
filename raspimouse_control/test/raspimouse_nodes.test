@@ -5,6 +5,9 @@
   <arg name="device_file_left_motor" value="/dev/shm/rtmotor_raw_l0" />
   <arg name="device_file_right_motor" value="/dev/shm/rtmotor_raw_r0" />
   <arg name="device_file_lightsensor" value="/dev/shm/rtlightsensor0" />
+  <arg name="device_file_sw0" value="/dev/shm/rtswitch0" />
+  <arg name="device_file_sw1" value="/dev/shm/rtswitch1" />
+  <arg name="device_file_sw2" value="/dev/shm/rtswitch2" />
 
   <include file="$(find raspimouse_control)/launch/raspimouse_control.launch">
     <arg name="device_file_buzzer" value="$(arg device_file_buzzer)" />
@@ -12,7 +15,17 @@
     <arg name="device_file_left_motor" value="$(arg device_file_left_motor)" />
     <arg name="device_file_right_motor" value="$(arg device_file_right_motor)" />
     <arg name="device_file_lightsensor" value="$(arg device_file_lightsensor)" />
+    <arg name="device_file_sw0" value="$(arg device_file_sw0)" />
+    <arg name="device_file_sw1" value="$(arg device_file_sw1)" />
+    <arg name="device_file_sw2" value="$(arg device_file_sw2)" />
   </include>
+
+  <!-- button -->
+  <test test-name="test_buttons" pkg="raspimouse_control" type="test_buttons.py" >
+    <param name="device_file_0" value="$(arg device_file_sw0)" />
+    <param name="device_file_1" value="$(arg device_file_sw1)" />
+    <param name="device_file_2" value="$(arg device_file_sw2)" />
+  </test>
 
   <!-- buzzer -->
   <test test-name="test_buzzer" pkg="raspimouse_control" type="test_buzzer.py" >
