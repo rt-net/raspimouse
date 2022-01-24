@@ -37,10 +37,6 @@ DEVICE_FILE = '/dev/rtbuzzer0'
 
 
 class BuzzerTest(unittest.TestCase):
-    def setUp(self):
-        self.client = actionlib.SimpleActionClient("music", MusicAction)
-        self.device_values = []
-
     def _get_subscribers(self, topic_path):
         ros_master = rosgraph.Master('/rostopic')
         topic_path = rosgraph.names.script_resolve_name('rostopic', topic_path)
@@ -76,11 +72,6 @@ class BuzzerTest(unittest.TestCase):
             data = f.readline()
         self.assertEqual(
             data, "1234\n", "value does not written to " + DEVICE_FILE)
-
-    def feedback_cb(self, feedback):
-        with open(DEVICE_FILE, "r") as f:
-            data = f.readline()
-        self.device_values.append(int(data.rstrip()))
 
 
 if __name__ == '__main__':
