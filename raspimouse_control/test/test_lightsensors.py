@@ -34,24 +34,14 @@ DEVICE_FILE = '/dev/rtlightsensor0'
 
 
 class LightsensorTest(unittest.TestCase):
-    def setUp(self):
-        self._count = 0
-        rospy.Subscriber('/lightsensors', LightSensorValues, self._callback)
-        self._values = LightSensorValues()
-
-    def _callback(self, data):
-        self._count += 1
-        self._values = data
-
-    def _check_values(self, lf, ls, rs, rf):
-        vs = self._values
-        self.assertEqual(vs.left_forward, lf, "different value: left_forward")
-        self.assertEqual(vs.left_side, ls, "different value: left_side")
-        self.assertEqual(vs.right_side, rs, "different value: right_side")
-        self.assertEqual(vs.right_forward, rf,
+    def _check_values(self, message, lf, ls, rs, rf):
+        self.assertEqual(message.left_forward, lf, "different value: left_forward")
+        self.assertEqual(message.left_side, ls, "different value: left_side")
+        self.assertEqual(message.right_side, rs, "different value: right_side")
+        self.assertEqual(message.right_forward, rf,
                          "different value: right_forward")
-        self.assertEqual(vs.sum_all, lf+ls+rs+rf, "different value: sum_all")
-        self.assertEqual(vs.sum_forward, lf+rf, "different value: sum_forward")
+        self.assertEqual(message.sum_all, lf+ls+rs+rf, "different value: sum_all")
+        self.assertEqual(message.sum_forward, lf+rf, "different value: sum_forward")
 
     def test_node_exist(self):
         nodes = rosnode.get_node_names()
@@ -62,20 +52,9 @@ class LightsensorTest(unittest.TestCase):
         time.sleep(2)  # パラメータの反映を待つ
         with open(DEVICE_FILE, "w") as f:  # ダミーの値をダミーのファイルに
             f.write("-1 0 123 4321\n")
-
-        time.sleep(3)
-        # コールバック関数が最低1回は呼ばれ、値が取得できているかを確認
-        self.assertFalse(self._count == 0, "cannot subscribe the topic")
-        self._check_values(4321, 123, 0, -1)
-
-    def test_change_parameter(self):
-        rospy.set_param('/lightsensors/frequency', 1)  # センサの値取得の周期を1Hzに
-        time.sleep(2)  # 反映を待つ
-        c_prev = self._count  # callbackが呼ばれた回数を記録
-        time.sleep(3)
-        # コールバック関数が3秒間で最低1回、最高でも4回しか呼ばれてないことを確認
-        self.assertTrue(self._count < c_prev + 4, "freq does not change")
-        self.assertFalse(self._count == c_prev, "subscriber is stopped")
+        # 値が取得できているかを確認
+        message = rospy.wait_for_message("/lightsensors", LightSensorValues, timeout=3)
+        self._check_values(message, 4321, 123, 0, -1)
 
 
 if __name__ == '__main__':

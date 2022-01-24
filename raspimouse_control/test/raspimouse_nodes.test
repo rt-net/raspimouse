@@ -4,7 +4,7 @@
   <arg name="device_file_motor_sw" value="/dev/shm/rtmotoren0" />
   <arg name="device_file_left_motor" value="/dev/shm/rtmotor_raw_l0" />
   <arg name="device_file_right_motor" value="/dev/shm/rtmotor_raw_r0" />
-  <arg name="device_file_lightsensor" value="/dev/shm/lightsensor0" />
+  <arg name="device_file_lightsensor" value="/dev/shm/rtlightsensor0" />
 
   <include file="$(find raspimouse_control)/launch/raspimouse_control.launch">
     <arg name="device_file_buzzer" value="$(arg device_file_buzzer)" />
@@ -13,12 +13,24 @@
     <arg name="device_file_right_motor" value="$(arg device_file_right_motor)" />
     <arg name="device_file_lightsensor" value="$(arg device_file_lightsensor)" />
   </include>
+
+  <!-- buzzer -->
   <test test-name="test_buzzer" pkg="raspimouse_control" type="test_buzzer.py" >
     <param name="device_file" value="$(arg device_file_buzzer)" />
   </test>
+
+  <!-- lightsensors -->
+  <param name="lightsensors/frequency" value="55.0" />
+  <param name="hztest_lightsensors/topic" value="lightsensors" />
+  <param name="hztest_lightsensors/hz" value="55.0" />
+  <param name="hztest_lightsensors/hzerror" value="0.5" />
+  <param name="hztest_lightsensors/test_duration" value="5.0" />
+  <test test-name="hztest_lightsensors" pkg="rostest" type="hztest" />
   <test test-name="test_lightsensors" pkg="raspimouse_control" type="test_lightsensors.py">
     <param name="device_file" value="$(arg device_file_lightsensor)" />
   </test>
+
+  <!-- motors -->
   <test test-name="test_motors" pkg="raspimouse_control" type="test_motors.py" time-limit="60.0">
     <param name="device_file_motor_sw" value="$(arg device_file_motor_sw)" />
     <param name="device_file_left_motor" value="$(arg device_file_left_motor)" />
