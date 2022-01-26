@@ -8,6 +8,10 @@
   <arg name="device_file_sw0" value="/dev/shm/rtswitch0" />
   <arg name="device_file_sw1" value="/dev/shm/rtswitch1" />
   <arg name="device_file_sw2" value="/dev/shm/rtswitch2" />
+  <arg name="device_file_led0" value="/dev/shm/rtled0" />
+  <arg name="device_file_led1" value="/dev/shm/rtled1" />
+  <arg name="device_file_led2" value="/dev/shm/rtled2" />
+  <arg name="device_file_led3" value="/dev/shm/rtled3" />
 
   <include file="$(find raspimouse_control)/launch/raspimouse_control.launch">
     <arg name="device_file_buzzer" value="$(arg device_file_buzzer)" />
@@ -18,6 +22,10 @@
     <arg name="device_file_sw0" value="$(arg device_file_sw0)" />
     <arg name="device_file_sw1" value="$(arg device_file_sw1)" />
     <arg name="device_file_sw2" value="$(arg device_file_sw2)" />
+    <arg name="device_file_led0" value="$(arg device_file_led0)" />
+    <arg name="device_file_led1" value="$(arg device_file_led1)" />
+    <arg name="device_file_led2" value="$(arg device_file_led2)" />
+    <arg name="device_file_led3" value="$(arg device_file_led3)" />
   </include>
 
   <!-- button -->
@@ -25,6 +33,14 @@
     <param name="device_file_0" value="$(arg device_file_sw0)" />
     <param name="device_file_1" value="$(arg device_file_sw1)" />
     <param name="device_file_2" value="$(arg device_file_sw2)" />
+  </test>
+
+  <!-- led -->
+  <test test-name="test_leds" pkg="raspimouse_control" type="test_leds.py" >
+    <param name="device_file_0" value="$(arg device_file_led0)" />
+    <param name="device_file_1" value="$(arg device_file_led1)" />
+    <param name="device_file_2" value="$(arg device_file_led2)" />
+    <param name="device_file_3" value="$(arg device_file_led3)" />
   </test>
 
   <!-- buzzer -->
