@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="enable_odom_tf" default="true" />
+    <arg name="initial_motor_power" default="on" />
+    <arg name="diff_drive_controller" default="diff_drive_controller" />
+    <arg name="device_file_buzzer" default="/dev/rtbuzzer0" />
+    <arg name="device_file_motor_sw" default="/dev/rtmotoren0" />
+    <arg name="device_file_left_motor" default="/dev/rtmotor_raw_l0" />
+    <arg name="device_file_right_motor" default="/dev/rtmotor_raw_r0" />
+    <arg name="device_file_lightsensor" default="/dev/rtlightsensor0" />
+    <arg name="device_file_sw0" default="/dev/rtswitch0" />
+    <arg name="device_file_sw1" default="/dev/rtswitch1" />
+    <arg name="device_file_sw2" default="/dev/rtswitch2" />
+    <arg name="device_file_led0" default="/dev/rtled0" />
+    <arg name="device_file_led1" default="/dev/rtled1" />
+    <arg name="device_file_led2" default="/dev/rtled2" />
+    <arg name="device_file_led3" default="/dev/rtled3" />
+    <!-- to avoid empty ns problem https://github.com/ros/ros_comm/issues/360 -->
+    <arg name="namespace" default="/" />
+
+    <group ns="$(arg namespace)">
+        <!-- raspimouse control nodes except motor control -->
+        <node name="buzzer" pkg="raspimouse_control" type="buzzer.py" required="true">
+            <param name="device_file" value="$(arg device_file_buzzer)" />
+        </node>
+
+        <node name="lightsensors" pkg="raspimouse_control" type="lightsensors" required="true">
+            <param name="frequency" value="10" />
+            <param name="device_file" value="$(arg device_file_lightsensor)" />
+        </node>
+
+        <node name="leds" pkg="raspimouse_control" type="leds" required="true">
+            <param name="device_file_0" value="$(arg device_file_led0)" />
+            <param name="device_file_1" value="$(arg device_file_led1)" />
+            <param name="device_file_2" value="$(arg device_file_led2)" />
+            <param name="device_file_3" value="$(arg device_file_led3)" />
+        </node>
+
+        <node name="buttons" pkg="raspimouse_control" type="buttons" required="true">
+            <param name="device_file_0" value="$(arg device_file_sw0)" />
+            <param name="device_file_1" value="$(arg device_file_sw1)" />
+            <param name="device_file_2" value="$(arg device_file_sw2)" />
+        </node>
+
+        <!-- raspimouse motor control nodes -->
+        <rosparam command="load" file="$(find raspimouse_control)/config/raspimouse_control.yaml" />
+
+        <arg name="tf_namespace" value="" if="$(eval arg('namespace') == '/')" />
+        <arg name="tf_namespace" value="$(arg namespace)/" unless="$(eval arg('namespace') == '/')" />
+        <rosparam subst_value="true" ns="$(arg diff_drive_controller)">
+            enable_odom_tf: $(arg enable_odom_tf)
+            base_frame_id: $(arg tf_namespace)base_footprint
+            odom_frame_id: $(arg tf_namespace)odom
+        </rosparam>
+        <node name="controller_spawer" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="$(arg diff_drive_controller) joint_state_controller" />
+
+        <node name="motors" pkg="raspimouse_control" type="motors" required="true"
+            output="screen" args="$(arg initial_motor_power)">
+            <param name="device_file_motor_sw" value="$(arg device_file_motor_sw)" />
+            <param name="device_file_left_motor" value="$(arg device_file_left_motor)" />
+            <param name="device_file_right_motor" value="$(arg device_file_right_motor)" />
+        </node>
+    </group>
+</launch>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>raspimouse_control</name>
+  <version>0.0.0</version>
+  <description>ROS control package for raspimouse</description>
+
+  <maintainer email="support@rt-net.jp">RT Corporation</maintainer>
+
+  <license>Apache-2.0</license>
+
+  <author email="aoki@rt-net.jp">Masatake Aoki</author>
+  <author email="daisuke.sato@rt-net.jp">Daisuke Sato</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>controller_manager</depend>
+  <depend>diff_drive_controller</depend>
+  <depend>joint_state_controller</depend>
+  <depend>raspimouse_description</depend>
+  <depend>raspimouse_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>std_srvs</depend>
+  <depend>topic_tools</depend>
+  <depend>twist_mux</depend>
+
+  <test_depend>geometry_msgs</test_depend>
+  <test_depend>nav_msgs</test_depend>
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rostest</test_depend>
+
+</package>
