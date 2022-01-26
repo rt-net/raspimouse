@@ -2,8 +2,8 @@
 Changelog for package raspimouse_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2022-01-26)
+------------------
 * Contributors: Daisuke Sato, Shota Aoki
 
 Feature updates
