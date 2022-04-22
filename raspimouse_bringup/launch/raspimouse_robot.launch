@@ -7,7 +7,7 @@
     <arg name="initial_motor_power" default="on" />
 
     <include file="$(find raspimouse_bringup)/launch/raspimouse_core.launch">
-        <arg name="namespace" default="$(arg namespace)" />
+        <arg name="namespace" value="$(arg namespace)" />
         <arg name="enable_odom_tf" value="$(arg enable_odom_tf)" />
         <arg name="urg" value="$(arg urg)" />
         <arg name="lidar_frame" value="$(arg lidar_frame)" />
