@@ -25,7 +25,7 @@ class RaspberryPiMouseHW : public hardware_interface::RobotHW
 {
 public:
   RaspberryPiMouseHW(ros::NodeHandle nh, ros::NodeHandle pnh);
-  // ~RaspberryPiMouseHW();
+  ~RaspberryPiMouseHW();
   void read(ros::Duration d);
   void write();
 
