@@ -53,6 +53,30 @@ RaspberryPiMouseHW::RaspberryPiMouseHW(ros::NodeHandle nh, ros::NodeHandle pnh)
   ROS_INFO("wheel_radius: %f", wheel_radius_);
 }
 
+RaspberryPiMouseHW::~RaspberryPiMouseHW()
+{
+  std::ofstream ofs_left;
+  std::ofstream ofs_right;
+
+  ofs_left.open(left_motor_device_file_);
+  if (not ofs_left.is_open())
+  {
+    ROS_ERROR("Cannot open %s", left_motor_device_file_.c_str());
+    return;
+  }
+  ofs_left << 0 << std::endl;
+  ofs_left.close();
+
+  ofs_right.open(right_motor_device_file_);
+  if (not ofs_right.is_open())
+  {
+    ROS_ERROR("Cannot open %s", right_motor_device_file_.c_str());
+    return;
+  }
+  ofs_right << 0 << std::endl;
+  ofs_right.close();
+}
+
 void RaspberryPiMouseHW::read(ros::Duration d)
 {
   pos[RIGHT] += vel[RIGHT] * d.nsec / 1000000000;
