@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
   pnh.getParam("device_file", lightsensor_device_file);
 
-  ros::Publisher pub = nh.advertise<raspimouse_msgs::LightSensorValues>("/lightsensors", 5);
+  ros::Publisher pub = nh.advertise<raspimouse_msgs::LightSensorValues>("lightsensors", 5);
 
   int freq = 10;
 
